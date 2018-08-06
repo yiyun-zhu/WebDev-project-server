@@ -25,7 +25,7 @@ public class Post {
 	
 	@ManyToOne
 	private Critic critic;
-	@OneToMany(mappedBy="module", orphanRemoval =true)
+	@OneToMany(mappedBy="post", orphanRemoval =true)
 	private List<Comment> comments;
 	
 	public int getId() {
