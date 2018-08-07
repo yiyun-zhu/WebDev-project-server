@@ -5,10 +5,13 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Critic extends User {
 	private String company;
 	@OneToMany(mappedBy="critic", orphanRemoval =true)
+	@JsonIgnore
 	private List<Post> post;
 
 	public String getCompany() {

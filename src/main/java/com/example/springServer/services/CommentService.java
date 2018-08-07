@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,14 +25,22 @@ public class CommentService {
 	@Autowired
 	PostRepository postRepo;
 	
-	@PostMapping("/api/comment")
-	public Comment createComment(@RequestBody Comment comment, HttpSession session) {
+	@PostMapping("/api/post/{postId}/comment")
+	public Comment createComment(
+			@RequestBody Comment comment, 
+			@PathVariable("postId")int postId,
+			HttpSession session) {
 		Person currentUser = (Person)session.getAttribute("user");
-//		if (currentUser.getRole() != "reviewer") return null;
 		comment.setUser((User)currentUser);
-		return commentRepo.save(comment);
+		Optional<Post> data = postRepo.findById(postId);
+		if (data.isPresent()) {
+			comment.setPost(data.get());
+			return commentRepo.save(comment);
+		}
+		return null;
 	}
-	@GetMapping("/api/post/{postId}/comment")
+	
+	@GetMapping("/api/post/{postId}/comments")
 	public List<Comment> findCommentsForPost(
 			@PathVariable("postId") int postId) {
 		Optional<Post> data = postRepo.findById(postId);
@@ -40,6 +49,22 @@ public class CommentService {
 			return post.getComments();
 		}
 		return null;
+	}
+	
+	@GetMapping("/api/comment/{commentId}")
+	public Comment findCommentById(
+			@PathVariable("commentId")int commentId) {
+		Optional<Comment> data = commentRepo.findById(commentId);
+		if(data.isPresent()) {
+			return data.get();
+		}
+		return null;
+	}
+	
+	@DeleteMapping("/api/comment/{commentId}")
+	public void deleteCommentById(
+			@PathVariable("commentId")int commentId) {
+		commentRepo.deleteById(commentId);
 	}
 
 }

@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Post {
@@ -32,6 +34,7 @@ public class Post {
 	@ManyToOne
 	private Critic critic;
 	@OneToMany(mappedBy="post", orphanRemoval =true)
+	@JsonIgnore
 	private List<Comment> comments;
 	
 	private String imdbID;

@@ -36,7 +36,7 @@ public class PostService {
 			post.setCritic(data.get());
 			return postRepo.save(post);	
 		}
-		return null;	
+		return null;
 	}
 	@GetMapping("/api/movie/{movieId}/post")
 	public List<Post> findPostsForMovie(
