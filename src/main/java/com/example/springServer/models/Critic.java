@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Critic extends Person {
+public class Critic extends User {
 	private String company;
 	@OneToMany(mappedBy="critic", orphanRemoval =true)
 	private List<Post> post;

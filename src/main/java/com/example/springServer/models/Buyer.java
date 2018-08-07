@@ -3,7 +3,7 @@ package com.example.springServer.models;
 import javax.persistence.Entity;
 
 @Entity
-public class Buyer extends Person{
+public class Buyer extends User {
 	private String address;
 
 	public String getAddress() {

@@ -17,7 +17,4 @@ public class User extends Person {
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
-	
-	
-
 }

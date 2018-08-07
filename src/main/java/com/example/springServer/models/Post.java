@@ -23,6 +23,13 @@ public class Post {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdTime;
 	
+	private String imbdID;
+	public String getImbdID() {
+		return imbdID;
+	}
+	public void setImbdID(String imbdID) {
+		this.imbdID = imbdID;
+	}
 	@ManyToOne
 	private Critic critic;
 	@OneToMany(mappedBy="post", orphanRemoval =true)
