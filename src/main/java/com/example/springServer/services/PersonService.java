@@ -17,7 +17,7 @@ import com.example.springServer.models.*;
 import com.example.springServer.repositories.*;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
 public class PersonService {
 	@Autowired
 	PersonRepository repository;
