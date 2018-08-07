@@ -19,22 +19,23 @@ public class Post {
 	private int id;
 	private String title;
 	private String content;
-	private double score;
+	private String score;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdTime;
 	
-	private String imbdID;
-	public String getImbdID() {
-		return imbdID;
-	}
-	public void setImbdID(String imbdID) {
-		this.imbdID = imbdID;
-	}
 	@ManyToOne
 	private Critic critic;
 	@OneToMany(mappedBy="post", orphanRemoval =true)
 	private List<Comment> comments;
 	
+	private String imdbID;
+	
+	public String getImdbID() {
+		return imdbID;
+	}
+	public void setImdbID(String imdbID) {
+		this.imdbID = imdbID;
+	}
 	public int getId() {
 		return id;
 	}
@@ -53,10 +54,10 @@ public class Post {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public double getScore() {
+	public String getScore() {
 		return score;
 	}
-	public void setScore(double score) {
+	public void setScore(String score) {
 		this.score = score;
 	}
 	public Date getCreatedTime() {
