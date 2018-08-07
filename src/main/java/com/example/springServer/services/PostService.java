@@ -25,9 +25,9 @@ public class PostService {
 	
 	@PostMapping("/api/post")
 	public Post createPost(@RequestBody Post post, HttpSession session) {
-		Person currentUser = (Person)session.getAttribute("user");
+		Critic currentUser = (Critic)session.getAttribute("user");
 //		if (currentUser.getRole() != "reviewer") return null;
-		post.setCritic((Critic)currentUser);
+		post.setCritic(currentUser);
 		return postRepo.save(post);		
 	}
 	@GetMapping("/api/movie/{movieId}/post")
