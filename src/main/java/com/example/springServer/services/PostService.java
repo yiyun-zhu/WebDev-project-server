@@ -22,13 +22,21 @@ import com.example.springServer.repositories.*;
 public class PostService {
 	@Autowired
 	PostRepository postRepo;
+	@Autowired
+	CriticRepository criticRepo;
 	
-	@PostMapping("/api/post")
-	public Post createPost(@RequestBody Post post, HttpSession session) {
-		Critic currentUser = (Critic)session.getAttribute("user");
+	@PostMapping("/api/post/{userId}")
+	public Post createPost(@RequestBody Post post, 
+			@PathVariable("userId")int userId,
+			HttpSession session) {
+//		Critic currentUser = (Critic)session.getAttribute("user");
 //		if (currentUser.getRole() != "reviewer") return null;
-		post.setCritic(currentUser);
-		return postRepo.save(post);		
+		Optional<Critic> data = criticRepo.findById(userId);
+		if (data.isPresent()) {
+			post.setCritic(data.get());
+			return postRepo.save(post);	
+		}
+		return null;	
 	}
 	@GetMapping("/api/movie/{movieId}/post")
 	public List<Post> findPostsForMovie(
