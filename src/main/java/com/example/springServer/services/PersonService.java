@@ -57,6 +57,20 @@ public class PersonService {
 		return newUser;
 	}
 	
+	// register
+	@PostMapping("/api/register/reviwer")
+	public Critic register(@RequestBody Critic newUser, HttpSession session) { //
+		Iterable<Person> person = repository.
+				findPersonByUsername(newUser.getUsername());
+		Iterator<Person> itr = person.iterator();
+		if (itr.hasNext()) {
+			return null;
+		}
+		criticRepo.save(newUser);
+		session.setAttribute("user", newUser);
+		return newUser;
+	}
+	
 	// findAll
 	@GetMapping("/api/person")
 	public Iterable<Person> findAllPersons(

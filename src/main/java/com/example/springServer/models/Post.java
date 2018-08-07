@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.data.annotation.CreatedDate;
+
 @Entity
 public class Post {
 	@Id
@@ -21,6 +23,7 @@ public class Post {
 	private String content;
 	private String score;
 	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
 	private Date createdTime;
 	
 	@ManyToOne
