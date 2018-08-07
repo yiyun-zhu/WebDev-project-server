@@ -110,4 +110,9 @@ public class PersonService {
 		return null;
 	}
 	
+	//logout
+	@PostMapping("api/logout")
+	public void logout(HttpSession session) {
+		session.invalidate();
+	}
 }
