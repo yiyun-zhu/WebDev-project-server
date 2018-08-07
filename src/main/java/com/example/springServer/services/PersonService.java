@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -89,10 +90,24 @@ public class PersonService {
 		return null;
 	}
 
+	// get profile
 	@GetMapping("api/profile")
 	public Person getProfile(HttpSession session) {
 		Person currentUser = (Person)session.getAttribute("user");
 		return (currentUser != null)? currentUser : null;		
+	}
+	
+	// updateProfile
+	@PutMapping("api/profile")
+	public Person updateProfile(@RequestBody Person newUser, HttpSession session) {
+		Person currentUser = (Person)session.getAttribute("user");
+		if (currentUser != null) {
+			currentUser.setAvatar(newUser.getAvatar());
+			currentUser.setEmail(newUser.getEmail());
+			repository.save(currentUser);
+			return currentUser;
+		}
+		return null;
 	}
 	
 }
