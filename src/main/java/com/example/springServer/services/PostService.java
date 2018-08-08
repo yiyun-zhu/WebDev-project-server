@@ -36,8 +36,20 @@ public class PostService {
 			post.setCritic(data.get());
 			return postRepo.save(post);	
 		}
-		return null;
+		return null;	
 	}
+//	@PostMapping("/api/post")
+//	public Post createPost(@RequestBody Post post, HttpSession session) {
+//		Person currentUser = (Person)session.getAttribute("user");
+//		if (currentUser.getRole() != "reviewer") return null;
+
+//			post.setCritic((Critic)currentUser);
+//			return postRepo.save(post);
+//		Critic c = (Critic)currentUser;
+//			return 	currentUser;
+//		}
+//		return null;
+//	}
 	@GetMapping("/api/movie/{movieId}/post")
 	public List<Post> findPostsForMovie(
 			@PathVariable("movieId") String movieId) {

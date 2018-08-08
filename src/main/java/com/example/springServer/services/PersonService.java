@@ -57,9 +57,9 @@ public class PersonService {
 		return newUser;
 	}
 	
-	// register
+	// register reviewer
 	@PostMapping("/api/register/reviwer")
-	public Critic register(@RequestBody Critic newUser, HttpSession session) { //
+	public Critic registerReviewer(@RequestBody Critic newUser, HttpSession session) { //
 		Iterable<Person> person = repository.
 				findPersonByUsername(newUser.getUsername());
 		Iterator<Person> itr = person.iterator();
@@ -70,7 +70,45 @@ public class PersonService {
 		session.setAttribute("user", newUser);
 		return newUser;
 	}
-	
+	// register buyer
+	@PostMapping("/api/register/buyer")
+	public Buyer registerBuyer(@RequestBody Buyer newUser, HttpSession session) { //
+		Iterable<Person> person = repository.
+				findPersonByUsername(newUser.getUsername());
+		Iterator<Person> itr = person.iterator();
+		if (itr.hasNext()) {
+			return null;
+		}
+		buyerRepo.save(newUser);
+		session.setAttribute("user", newUser);
+		return newUser;
+	}	
+	// register seller
+	@PostMapping("/api/register/seller")
+	public Seller registerSeller(@RequestBody Seller newUser, HttpSession session) { //
+		Iterable<Person> person = repository.
+				findPersonByUsername(newUser.getUsername());
+		Iterator<Person> itr = person.iterator();
+		if (itr.hasNext()) {
+			return null;
+		}
+		sellerRepo.save(newUser);
+		session.setAttribute("user", newUser);
+		return newUser;
+	}
+	// register user
+	@PostMapping("/api/register/user")
+	public User register(@RequestBody User newUser, HttpSession session) { //
+		Iterable<Person> person = repository.
+				findPersonByUsername(newUser.getUsername());
+		Iterator<Person> itr = person.iterator();
+		if (itr.hasNext()) {
+			return null;
+		}
+		userRepo.save(newUser);
+		session.setAttribute("user", newUser);
+		return newUser;
+	}
 	// findAll
 	@GetMapping("/api/person")
 	public Iterable<Person> findAllPersons(
