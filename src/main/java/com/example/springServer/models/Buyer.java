@@ -10,10 +10,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Buyer extends User {
 	private String address;
-	@OneToMany(mappedBy="buyer", orphanRemoval =true)
+	@OneToMany(mappedBy="buyer", orphanRemoval=true)
 	@JsonIgnore
 	private List<Orders> order;
+	@OneToMany(mappedBy="buyer", orphanRemoval=true)
+	@JsonIgnore
+	private List<Entry> cartItems;
 	
+
+	public List<Entry> getCartItems() {
+		return cartItems;
+	}
+
+	public void setCartItems(List<Entry> cartItems) {
+		this.cartItems = cartItems;
+	}
+
 	public String getAddress() {
 		return address;
 	}

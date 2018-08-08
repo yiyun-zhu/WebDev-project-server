@@ -16,7 +16,14 @@ public class Entry {
 	private Product product;
 	@ManyToOne
 	private Orders order;
+	private int amount;
 	
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
 	public int getId() {
 		return id;
 	}
@@ -35,8 +42,5 @@ public class Entry {
 	public void setOrder(Orders order) {
 		this.order = order;
 	}
-	
-
-	
 	
 }

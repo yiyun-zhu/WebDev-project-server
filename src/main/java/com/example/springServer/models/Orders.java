@@ -51,6 +51,9 @@ public class Orders {
 	public void setEntry(List<Entry> entry) {
 		this.entry = entry;
 	}
-    
+    public void setOrder(Orders order) {
+    	this.buyer = order.getBuyer();
+    	this.entry = order.getEntry();
+    }
 
 }

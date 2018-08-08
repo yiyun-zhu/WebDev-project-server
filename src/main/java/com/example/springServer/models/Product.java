@@ -25,6 +25,7 @@ public class Product {
 	@OneToMany(mappedBy="product", orphanRemoval =true)
 	@JsonIgnore
 	private List<Entry> entry;
+	private String title;
 	
 	public int getId() {
 		return id;
@@ -37,12 +38,6 @@ public class Product {
 	}
 	public void setPrice(int price) {
 		this.price = price;
-	}
-	public int getAmount() {
-		return amount;
-	}
-	public void setAmount(int amount) {
-		this.amount = amount;
 	}
 	public Seller getSeller() {
 		return seller;
@@ -62,6 +57,22 @@ public class Product {
 	public void setMovieId(String movieId) {
 		this.movieId = movieId;
 	}
-	
 
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+	public void setProduct(Product product) {
+		this.price = product.price;
+		this.seller = product.seller;
+		this.movieId = product.movieId;
+	}
 }
