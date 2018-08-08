@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,8 +21,8 @@ public class Order {
     private Date createdTime;
     @ManyToOne
     private Buyer buyer;
+    @OneToMany(mappedBy="order", orphanRemoval=true)
     private List<Entry> entries;
-    private boolean completed;
     
 	public int getId() {
 		return id;
@@ -47,12 +48,6 @@ public class Order {
 	}
 	public void setEntries(List<Entry> entries) {
 		this.entries = entries;
-	}
-	public boolean isCompleted() {
-		return completed;
-	}
-	public void setCompleted(boolean completed) {
-		this.completed = completed;
 	}
     public void setOrder(Order order) {
     	this.buyer = order.getBuyer();

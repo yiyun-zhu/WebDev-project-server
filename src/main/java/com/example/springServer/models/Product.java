@@ -15,6 +15,8 @@ public class Product {
 	@ManyToOne
 	private Seller seller;
 	private String movieId;
+	private String title;
+	private int amount;
 	
 	public int getId() {
 		return id;
@@ -40,7 +42,18 @@ public class Product {
 	public void setMovieId(String movieId) {
 		this.movieId = movieId;
 	}
-	
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
 	public void setProduct(Product product) {
 		this.price = product.price;
 		this.seller = product.seller;
