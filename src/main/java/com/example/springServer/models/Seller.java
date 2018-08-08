@@ -12,14 +12,14 @@ public class Seller extends User {
 	private String address;
 	@OneToMany(mappedBy="seller", orphanRemoval =true)
 	@JsonIgnore
-	private List<Product> products;
+	private List<Product> product;
 	
-	public List<Product> getProducts() {
-		return products;
+	public List<Product> getProduct() {
+		return product;
 	}
 
-	public void setProducts(List<Product> products) {
-		this.products = products;
+	public void setProducts(List<Product> product) {
+		this.product = product;
 	}
 
 	public String getAddress() {

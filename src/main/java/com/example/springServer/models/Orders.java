@@ -8,32 +8,36 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-public class Order {
+public class Orders {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdTime;
+    private Date created;
     @ManyToOne
     private Buyer buyer;
-    private List<Entry> entries;
-    private boolean completed;
-    
+	@OneToMany(mappedBy="order", orphanRemoval =true)
+	@JsonIgnore
+    private List<Entry> entry;
+	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Date getCreatedTime() {
-		return createdTime;
+	public Date getCreated() {
+		return created;
 	}
-	public void setCreatedTime(Date createdTime) {
-		this.createdTime = createdTime;
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 	public Buyer getBuyer() {
 		return buyer;
@@ -41,21 +45,12 @@ public class Order {
 	public void setBuyer(Buyer buyer) {
 		this.buyer = buyer;
 	}
+	public List<Entry> getEntry() {
+		return entry;
+	}
+	public void setEntry(List<Entry> entry) {
+		this.entry = entry;
+	}
+    
 
-	public List<Entry> getEntries() {
-		return entries;
-	}
-	public void setEntries(List<Entry> entries) {
-		this.entries = entries;
-	}
-	public boolean isCompleted() {
-		return completed;
-	}
-	public void setCompleted(boolean completed) {
-		this.completed = completed;
-	}
-    public void setOrder(Order order) {
-    	this.buyer = order.getBuyer();
-    	this.entries = order.getEntries();
-    }
 }

@@ -1,10 +1,15 @@
 package com.example.springServer.models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Product {
@@ -12,9 +17,14 @@ public class Product {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private int price;
+	private int amount;
+	private String movieId;
 	@ManyToOne
 	private Seller seller;
-	private String movieId;
+	//
+	@OneToMany(mappedBy="product", orphanRemoval =true)
+	@JsonIgnore
+	private List<Entry> entry;
 	
 	public int getId() {
 		return id;
@@ -28,11 +38,23 @@ public class Product {
 	public void setPrice(int price) {
 		this.price = price;
 	}
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
 	public Seller getSeller() {
 		return seller;
 	}
 	public void setSeller(Seller seller) {
 		this.seller = seller;
+	}
+	public List<Entry> getEntry() {
+		return entry;
+	}
+	public void setEntry(List<Entry> entry) {
+		this.entry = entry;
 	}
 	public String getMovieId() {
 		return movieId;
@@ -41,9 +63,5 @@ public class Product {
 		this.movieId = movieId;
 	}
 	
-	public void setProduct(Product product) {
-		this.price = product.price;
-		this.seller = product.seller;
-		this.movieId = product.movieId;
-	}
+
 }

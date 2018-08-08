@@ -2,9 +2,9 @@ package com.example.springServer.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.example.springServer.models.Order;
+import com.example.springServer.models.Orders;
 
 
-public interface OrderRepository extends CrudRepository<Order, Integer> {
+public interface OrderRepository extends CrudRepository<Orders, Integer> {
 	
 }
