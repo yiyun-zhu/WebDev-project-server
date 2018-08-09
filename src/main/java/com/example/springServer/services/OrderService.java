@@ -57,6 +57,7 @@ public class OrderService {
 		if (data.isPresent()) {
 			Buyer buyer = data.get();
 			order.setBuyer(buyer);
+			orderRepository.save(order);
 			List<Entry> entries = order.getEntry();
 			List<Entry> cartItems = buyer.getCartItems();
 			if (cartItems != null) {
@@ -65,13 +66,13 @@ public class OrderService {
 					entry.setAmount(item.getAmount());
 					entry.setBuyer(item.getBuyer());
 					entry.setProduct(item.getProduct());
-					entry.setOrder(order);	
 					entryRepository.save(entry);
+					entry.setOrder(order);	
 					entries.add(entry);
 					entryRepository.delete(item);
 				}
 			}
-			return orderRepository.save(order);
+			return order;
 		}
 		return null;
 	}	
