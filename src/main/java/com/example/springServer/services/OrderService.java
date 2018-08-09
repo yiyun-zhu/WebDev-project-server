@@ -53,19 +53,23 @@ public class OrderService {
 	
 	@PostMapping("/api/buyer/{bid}/order")
 	public Orders createOrder(@RequestBody Orders order, @PathVariable("bid") int id) {
-//		Orders newOrder = new Orders();
 		Optional<Buyer> data = buyerRepository.findById(id);
 		if (data.isPresent()) {
 			Buyer buyer = data.get();
 			order.setBuyer(buyer);
+			List<Entry> entries = order.getEntry();
 			List<Entry> cartItems = buyer.getCartItems();
 			if (cartItems != null) {
 				for (Entry item : cartItems) {
-					item.setOrder(order);
+					Entry entry = new Entry();
+					entry.setAmount(item.getAmount());
+					entry.setBuyer(item.getBuyer());
+					entry.setProduct(item.getProduct());
+					entry.setOrder(order);		
+					entries.add(entry);
+					entryRepository.delete(item);
 				}
 			}
-			order.setEntry(cartItems);
-//			buyer.setCartItems(null);
 			return orderRepository.save(order);
 		}
 		return null;
