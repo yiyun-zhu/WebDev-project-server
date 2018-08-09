@@ -65,7 +65,8 @@ public class OrderService {
 					entry.setAmount(item.getAmount());
 					entry.setBuyer(item.getBuyer());
 					entry.setProduct(item.getProduct());
-					entry.setOrder(order);		
+					entry.setOrder(order);	
+					entryRepository.save(entry);
 					entries.add(entry);
 					entryRepository.delete(item);
 				}
