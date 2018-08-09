@@ -64,7 +64,8 @@ public class OrderService {
 					item.setOrder(order);
 				}
 			}
-			buyer.setCartItems(null);
+			order.setEntry(cartItems);
+//			buyer.setCartItems(null);
 			return orderRepository.save(order);
 		}
 		return null;

@@ -16,7 +16,6 @@ public class Buyer extends User {
 	@OneToMany(mappedBy="buyer", orphanRemoval=true)
 	@JsonIgnore
 	private List<Entry> cartItems;
-	
 
 	public List<Entry> getCartItems() {
 		return cartItems;
