@@ -27,6 +27,12 @@ public class ProductService {
 	@Autowired
 	SellerRepository sellerRepository;
 	
+	@GetMapping("/api/movie/{movieId}/products")
+	public List<Product> findProductsByMovieId(
+			@PathVariable("movieId") String movieId) {
+		return (List<Product>)productRepository.findProductsForMovie(movieId);
+	}
+	
 	@GetMapping("/api/seller/{sid}/product")
 	public List<Product> findProductsBySellerId(@PathVariable("sid") int id) {
 		Optional<Seller> data = sellerRepository.findById(id);

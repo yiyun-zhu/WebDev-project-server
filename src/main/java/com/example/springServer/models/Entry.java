@@ -11,13 +11,20 @@ public class Entry {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	//
 	@ManyToOne
 	private Product product;
 	@ManyToOne
 	private Orders order;
 	private int amount;
+	@ManyToOne
+	private Buyer buyer;
 	
+	public Buyer getBuyer() {
+		return buyer;
+	}
+	public void setBuyer(Buyer buyer) {
+		this.buyer = buyer;
+	}
 	public int getAmount() {
 		return amount;
 	}
