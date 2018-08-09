@@ -27,6 +27,11 @@ public class ProductService {
 	@Autowired
 	SellerRepository sellerRepository;
 	
+	@GetMapping("/api/products")
+	public List<Product> findProducts() {
+		return (List<Product>)productRepository.findAll();
+	}
+	
 	@GetMapping("/api/movie/{movieId}/products")
 	public List<Product> findProductsByMovieId(
 			@PathVariable("movieId") String movieId) {
