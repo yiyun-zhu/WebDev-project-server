@@ -1,5 +1,6 @@
 package com.example.springServer.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,16 +40,35 @@ public class OrderService {
 		return null;
 	}
 	
+//	@PostMapping("/api/buyer/{bid}/order")
+//	public Orders createOrder(@RequestBody Orders order, @PathVariable("bid") int id) {
+//		Optional<Buyer> data = buyerRepository.findById(id);
+//		if (data.isPresent()) {
+//			Buyer buyer = data.get();
+//			order.setBuyer(buyer);
+//			return orderRepository.save(order);
+//		}
+//		return null;
+//	}
+	
 	@PostMapping("/api/buyer/{bid}/order")
 	public Orders createOrder(@RequestBody Orders order, @PathVariable("bid") int id) {
+		Orders newOrder = new Orders();
 		Optional<Buyer> data = buyerRepository.findById(id);
 		if (data.isPresent()) {
 			Buyer buyer = data.get();
-			order.setBuyer(buyer);
-			return orderRepository.save(order);
+			newOrder.setBuyer(buyer);
+			List<Entry> cartItems = buyer.getCartItems();
+			if (cartItems != null) {
+				for (Entry item : cartItems) {
+					item.setOrder(newOrder);
+				}
+			}
+			buyer.setCartItems(null);
+			return orderRepository.save(newOrder);
 		}
 		return null;
-	}
+	}	
 	
 	@PutMapping("/api/order/{oid}")
 	public Orders updateOrder(@RequestBody Orders order, @PathVariable("oid") int id) {

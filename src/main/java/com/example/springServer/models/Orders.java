@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,14 +13,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Orders {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
     @Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
     private Date created;
     @ManyToOne
     private Buyer buyer;
