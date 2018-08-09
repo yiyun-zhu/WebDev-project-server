@@ -24,6 +24,14 @@ public class CartService {
 	@Autowired 
 	EntryRepository entryRepository;
 	
+	@Autowired
+	ProductRepository productRepo;
+		
+	@GetMapping("api/entries")
+	public List<Entry> findAllEntries() {
+		return (List<Entry>)entryRepository.findAll();
+	}
+	
 	@GetMapping("api/buyer/{buyId}/entries")
 	public List<Entry> findCartByBuyer(
 			@PathVariable("buyId")int buyId) {
@@ -41,10 +49,19 @@ public class CartService {
 		entryRepository.deleteById(entryId);
 	}
 	
-	@PostMapping("/api/entry")
+	@PostMapping("/api/buyer/{bId}/product/{pId}/entry")
 	public Entry addEntryToCart(
+			@PathVariable("bId")int bId,
+			@PathVariable("pId")int pId,
 			@RequestBody Entry entry) {
-		return entryRepository.save(entry);
+		Optional<Product> data1 = productRepo.findById(pId);
+		Optional<Buyer> data2 =  buyerRepository.findById(bId);
+		if (data1.isPresent() && data2.isPresent()) {
+			entry.setBuyer(data2.get());
+			entry.setProduct(data1.get());
+			return entryRepository.save(entry);
+		}
+		return null;
 	}
 	
 }
