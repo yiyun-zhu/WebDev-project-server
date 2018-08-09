@@ -74,5 +74,6 @@ public class Product {
 		this.price = product.price;
 		this.seller = product.seller;
 		this.movieId = product.movieId;
+		this.title = product.title;
 	}
 }

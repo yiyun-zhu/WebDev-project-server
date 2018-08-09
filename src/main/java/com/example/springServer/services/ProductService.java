@@ -38,7 +38,7 @@ public class ProductService {
 		Optional<Seller> data = sellerRepository.findById(id);
 		if (data.isPresent()) {
 			Seller seller = data.get();
-			List<Product>  products = seller.getProducts();
+			List<Product>  products = seller.getProduct();
 			return products;
 		}
 		return null;
@@ -54,7 +54,9 @@ public class ProductService {
 	}
 	
 	@PostMapping("/api/seller/{sid}/product")
-	public Product createProduct(@PathVariable("sid") int id, @RequestBody Product product) {
+	public Product createProduct(
+			@PathVariable("sid") int id, 
+			@RequestBody Product product) {
 		Optional<Seller> data = sellerRepository.findById(id);
 		if (data.isPresent()) {
 			Seller seller = data.get();

@@ -40,7 +40,7 @@ public class OrderService {
 	}
 	
 	@PostMapping("/api/buyer/{bid}/order")
-	public Order createOrder(@RequestBody Order order, @PathVariable("bid") int id) {
+	public Orders createOrder(@RequestBody Orders order, @PathVariable("bid") int id) {
 		Optional<Buyer> data = buyerRepository.findById(id);
 		if (data.isPresent()) {
 			Buyer buyer = data.get();
@@ -51,10 +51,10 @@ public class OrderService {
 	}
 	
 	@PutMapping("/api/order/{oid}")
-	public Order updateOrder(@RequestBody Order order, @PathVariable("oid") int id) {
-		Optional<Order> data = orderRepository.findById(id);
+	public Orders updateOrder(@RequestBody Orders order, @PathVariable("oid") int id) {
+		Optional<Orders> data = orderRepository.findById(id);
 		if (data.isPresent()) {
-			Order oldOrder = data.get();
+			Orders oldOrder = data.get();
 			oldOrder.setOrder(order);
 			orderRepository.save(oldOrder);
 			return oldOrder;

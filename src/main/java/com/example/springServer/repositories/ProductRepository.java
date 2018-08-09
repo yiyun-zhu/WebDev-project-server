@@ -10,7 +10,7 @@ import com.example.springServer.models.Product;
 public interface ProductRepository  
 		extends CrudRepository<Product, Integer> {
 	@Query("SELECT p FROM Product p WHERE p.movieId=:movieId")
-	Iterable<Post> findProductsForMovie(@Param("movieId") String movieId);
+	Iterable<Product> findProductsForMovie(@Param("movieId") String movieId);
 	
 
 }
