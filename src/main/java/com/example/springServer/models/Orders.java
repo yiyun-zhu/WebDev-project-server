@@ -33,13 +33,13 @@ public class Orders {
 	@OneToMany(mappedBy="order", orphanRemoval =true)
 	@JsonIgnore
     private List<Entry> entry;
-	private boolean isCompleted;
+	private boolean complete;
 	
-	public boolean isCompleted() {
-		return isCompleted;
+	public boolean isComplete() {
+		return complete;
 	}
-	public void setCompleted(boolean isCompleted) {
-		this.isCompleted = isCompleted;
+	public void setComplete(boolean complete) {
+		this.complete = complete;
 	}
 	public String getName() {
 		return name;

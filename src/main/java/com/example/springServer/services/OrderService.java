@@ -123,6 +123,7 @@ public class OrderService {
 	
 	@PutMapping("/api/modify/order")
 	public Orders confirmOrder(@RequestBody Orders order) {
+		System.out.println("yeah");
 		List<Entry> entries = order.getEntry();
 		for (Entry entry : entries) {
 			Product product = entry.getProduct();
