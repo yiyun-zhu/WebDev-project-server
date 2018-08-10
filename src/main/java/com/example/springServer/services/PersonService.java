@@ -1,5 +1,6 @@
 package com.example.springServer.services;
 
+import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -192,6 +193,12 @@ public class PersonService {
 	//logout
 	@PostMapping("api/logout")
 	public void logout(HttpSession session) {
-		session.invalidate();
+		Person currentUser = (Person)session.getAttribute("user");
+		if (currentUser != null) {
+			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+			currentUser.setLastLogin(timestamp);
+			repository.save(currentUser);
+			session.invalidate();
+		}
 	}
 }
