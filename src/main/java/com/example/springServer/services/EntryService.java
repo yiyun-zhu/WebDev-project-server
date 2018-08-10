@@ -108,10 +108,10 @@ public class EntryService {
 			Optional<Entry> data = entryRepository.findById(id);
 			if (data.isPresent()) {
 				Entry entry = data.get();
-				if (newEntry.getBuyerScore() != -1) {
+				if (newEntry.getBuyerScore() == -1) {
 					entry.setSellerScore(newEntry.getSellerScore());					
 				}
-				if (newEntry.getSellerScore() != -1) {
+				if (newEntry.getSellerScore() == -1) {
 					entry.setBuyerScore(newEntry.getBuyerScore());					
 				}
 				return entryRepository.save(entry);

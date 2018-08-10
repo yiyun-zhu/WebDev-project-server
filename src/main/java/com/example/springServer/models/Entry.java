@@ -22,7 +22,7 @@ public class Entry {
 //	@OneToMany(mappedBy="entry", orphanRemoval=true)
 //	@JsonIgnore
 //	private List<Rating> ratings;
-	private int sellerScore = -1;;
+	private int sellerScore = -1;
 	
 	private int buyerScore = -1; 
 	
