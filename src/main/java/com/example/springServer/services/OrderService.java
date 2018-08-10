@@ -83,8 +83,8 @@ public class OrderService {
 			Buyer buyer = data.get();
 			order.setBuyer(buyer);
 			order.setComplete(false);
-			order.setName(buyer.getUsername() + " created order " + order.getId());
 			orderRepository.save(order);
+			order.setName(buyer.getUsername() + " created order " + order.getId());
 //			List<Entry> entries = order.getEntry();
 			List<Entry> cartItems = buyer.getCartItems();
 			if (cartItems != null) {

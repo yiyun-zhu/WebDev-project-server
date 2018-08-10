@@ -26,7 +26,7 @@ public class CartService {
 	
 	@Autowired
 	ProductRepository productRepo;
-		
+	
 	@GetMapping("api/entries")
 	public List<Entry> findAllEntries() {
 		return (List<Entry>)entryRepository.findAll();
@@ -41,12 +41,6 @@ public class CartService {
 			return buyer.getCartItems();
 		}
 		return null;
-	}
-	
-	@DeleteMapping("/api/entry/{entryId}")
-	public void deleteEntryById(
-			@PathVariable("entryId")int entryId) {
-		entryRepository.deleteById(entryId);
 	}
 	
 	@PostMapping("/api/buyer/{bId}/product/{pId}/entry")
@@ -65,6 +59,12 @@ public class CartService {
 			return entryRepository.save(entry);
 		}
 		return null;
+	}
+	
+	@DeleteMapping("/api/entry/{entryId}")
+	public void deleteEntryById(
+			@PathVariable("entryId")int entryId) {
+		entryRepository.deleteById(entryId);
 	}
 	
 }
