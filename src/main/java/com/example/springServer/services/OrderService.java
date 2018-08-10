@@ -78,7 +78,7 @@ public class OrderService {
 		if (data.isPresent()) {
 			Buyer buyer = data.get();
 			order.setBuyer(buyer);
-			order.setName(buyer.getUsername() + "created order" + order.getId());
+			order.setName(buyer.getUsername() + " created order " + order.getId());
 			orderRepository.save(order);
 //			List<Entry> entries = order.getEntry();
 			List<Entry> cartItems = buyer.getCartItems();

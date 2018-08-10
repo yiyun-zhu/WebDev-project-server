@@ -61,7 +61,7 @@ public class CartService {
 			entry.setBuyer(buyer);
 			Product product = data1.get();
 			entry.setProduct(product);
-			entry.setName(buyer.getUsername() + "purchased" + product.getTitle());
+			entry.setName(buyer.getUsername() + " purchased " + product.getTitle());
 			return entryRepository.save(entry);
 		}
 		return null;
