@@ -1,15 +1,10 @@
 package com.example.springServer.models;
 
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Entry {
@@ -24,10 +19,25 @@ public class Entry {
 	@ManyToOne
 	private Buyer buyer;
 	private String name;
-	@OneToMany(mappedBy="entry", orphanRemoval=true)
-	@JsonIgnore
-	private List<Rating> ratings;
+//	@OneToMany(mappedBy="entry", orphanRemoval=true)
+//	@JsonIgnore
+//	private List<Rating> ratings;
+	private int sellerScore = -1;;
 	
+	private int buyerScore = -1; 
+	
+	public int getSellerScore() {
+		return sellerScore;
+	}
+	public void setSellerScore(int sellerScore) {
+		this.sellerScore = sellerScore;
+	}
+	public int getBuyerScore() {
+		return buyerScore;
+	}
+	public void setBuyerScore(int buyerScore) {
+		this.buyerScore = buyerScore;
+	}
 	public String getName() {
 		return name;
 	}

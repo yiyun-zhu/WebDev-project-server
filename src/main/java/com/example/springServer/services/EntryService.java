@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -100,10 +101,29 @@ public class EntryService {
 		return null;
 	}
 	
+	@PutMapping("/api/entry/{entryId}/rate")
+	public Entry updateEntryInRate(
+			@PathVariable("entryId")int id,
+			@RequestBody Entry newEntry) {
+			Optional<Entry> data = entryRepository.findById(id);
+			if (data.isPresent()) {
+				Entry entry = data.get();
+				if (newEntry.getBuyerScore() != -1) {
+					entry.setSellerScore(newEntry.getSellerScore());					
+				}
+				if (newEntry.getSellerScore() != -1) {
+					entry.setBuyerScore(newEntry.getBuyerScore());					
+				}
+				return entryRepository.save(entry);
+			}
+			return null;
+	}
+	
 	@DeleteMapping("/api/entry/{entryId}")
 	public void deleteEntryById(
 			@PathVariable("entryId")int entryId) {
 		entryRepository.deleteById(entryId);
 	}
+	
 	
 }
