@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,6 +51,10 @@ public class PostService {
 //		}
 //		return null;
 //	}
+	@GetMapping("/api/post")
+	public List<Post> findAllPosts() {
+		return (List<Post>)postRepo.findAll();
+	}
 	@GetMapping("/api/movie/{movieId}/post")
 	public List<Post> findPostsForMovie(
 			@PathVariable("movieId") String movieId) {
@@ -62,6 +67,20 @@ public class PostService {
 		if (data.isPresent()) {
 			Post post = data.get();
 			return post;
+		}
+		return null;
+	}
+	@PutMapping("api/post/{postId}")
+	public Post updatePostById(
+			@PathVariable("postId")int postId,
+			@RequestBody Post newPost) {
+		Optional<Post> data = postRepo.findById(postId);
+		if (data.isPresent()) {
+			Post post = data.get();
+			post.setTitle(newPost.getTitle());
+			post.setContent(newPost.getContent());
+			post.setScore(newPost.getScore());
+			return postRepo.save(post);
 		}
 		return null;
 	}

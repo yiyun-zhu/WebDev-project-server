@@ -1,12 +1,14 @@
 package com.example.springServer.services;
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -98,7 +100,7 @@ public class PersonService {
 	}
 	// register user
 	@PostMapping("/api/register/user")
-	public User register(@RequestBody User newUser, HttpSession session) { //
+	public User registerUser(@RequestBody User newUser, HttpSession session) { //
 		Iterable<Person> person = repository.
 				findPersonByUsername(newUser.getUsername());
 		Iterator<Person> itr = person.iterator();
@@ -109,7 +111,7 @@ public class PersonService {
 		session.setAttribute("user", newUser);
 		return newUser;
 	}
-	// findAll
+	// find by username, by credentials, find all in one function 
 	@GetMapping("/api/person")
 	public Iterable<Person> findAllPersons(
 			@RequestParam(name="username",
@@ -127,7 +129,32 @@ public class PersonService {
 			return repository.findAll();
 		}
 	}
-	
+	// find by id
+	@GetMapping("/api/person/{pId}")
+	public Person findPersonById(@PathVariable("pId")int pId) {
+		Optional<Person> data = repository.findById(pId);
+		if (data.isPresent()) {
+			Person p = data.get();
+			return p;
+		}
+		return null;
+	}
+	// update a person
+	@PutMapping("/api/person/{pId}")
+	public Person updatePerson(
+			@PathVariable("pId")int pId,
+			@RequestBody Person newPerson) {
+		Optional<Person> data = repository.findById(pId);
+		if (data.isPresent()) {
+			Person p = data.get();
+			p.setAvatar(newPerson.getAvatar());
+			p.setEmail(newPerson.getEmail());
+			p.setPassword(newPerson.getPassword());
+			p.setRole(newPerson.getRole());
+			return repository.save(p);
+		}
+		return null;
+	}		
 	// login
 	@PostMapping("/api/login")
 	public Person login(@RequestBody Person user, HttpSession session) { //

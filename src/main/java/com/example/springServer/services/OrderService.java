@@ -82,8 +82,9 @@ public class OrderService {
 		if (data.isPresent()) {
 			Buyer buyer = data.get();
 			order.setBuyer(buyer);
-			orderRepository.save(order);
+			order.setComplete(false);
 			order.setName(buyer.getUsername() + " created order " + order.getId());
+			orderRepository.save(order);
 //			List<Entry> entries = order.getEntry();
 			List<Entry> cartItems = buyer.getCartItems();
 			if (cartItems != null) {
@@ -102,7 +103,24 @@ public class OrderService {
 			return order;
 		}
 		return null;
-	}	
+	}
+	
+	@PutMapping("/api/modify/order")
+	public Orders confirmOrder(@RequestBody Orders order) {
+		Optional<Orders> data = orderRepository.findById(order.getId());
+		if (data.isPresent()) {
+			Orders orderToUpdate = data.get();
+			List<Entry> entries = orderToUpdate.getEntry();
+			for (Entry entry : entries) {
+				Product product = entry.getProduct();
+				product.setAmount(product.getAmount() - entry.getAmount());
+				productRepository.save(product);
+			}
+			orderToUpdate.setComplete(order.isComplete());
+			return orderToUpdate;
+		}
+		return null;
+	}
 	
 	@PutMapping("/api/order/{oid}")
 	public Orders updateOrder(@RequestBody Orders order, @PathVariable("oid") int id) {
@@ -121,20 +139,6 @@ public class OrderService {
 		orderRepository.deleteById(id);
 	}
 	
-	@PutMapping("/api/modify/order")
-	public Orders confirmOrder(@RequestBody Orders order) {
-		Optional<Orders> data = orderRepository.findById(order.getId());
-		if (data.isPresent()) {
-			Orders orderToUpdate = data.get();
-			List<Entry> entries = orderToUpdate.getEntry();
-			for (Entry entry : entries) {
-				Product product = entry.getProduct();
-				product.setAmount(product.getAmount() - entry.getAmount());
-				productRepository.save(product);
-			}
-			return orderToUpdate;
-		}
-		return null;
-	}
+
 	
 }
