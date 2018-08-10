@@ -27,12 +27,19 @@ public class Orders {
     @Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
     private Date created;
+    private String name;
     @ManyToOne
     private Buyer buyer;
 	@OneToMany(mappedBy="order", orphanRemoval =true)
 	@JsonIgnore
     private List<Entry> entry;
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public int getId() {
 		return id;
 	}
