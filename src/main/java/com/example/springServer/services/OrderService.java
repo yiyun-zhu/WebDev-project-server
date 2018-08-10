@@ -116,7 +116,7 @@ public class OrderService {
 				product.setAmount(product.getAmount() - entry.getAmount());
 				productRepository.save(product);
 			}
-			orderToUpdate.setComplete(order.isComplete());
+			orderToUpdate.setComplete(true);
 			return orderToUpdate;
 		}
 		return null;
