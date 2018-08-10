@@ -85,6 +85,7 @@ public class OrderService {
 			order.setComplete(false);
 			orderRepository.save(order);
 			order.setName(buyer.getUsername() + " created order " + order.getId());
+			orderRepository.save(order);
 //			List<Entry> entries = order.getEntry();
 			List<Entry> cartItems = buyer.getCartItems();
 			if (cartItems != null) {
@@ -117,6 +118,7 @@ public class OrderService {
 				productRepository.save(product);
 			}
 			orderToUpdate.setComplete(true);
+			orderRepository.save(orderToUpdate);
 			return orderToUpdate;
 		}
 		return null;
