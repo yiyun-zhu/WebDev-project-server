@@ -35,25 +35,6 @@ public class OrderService {
 	@Autowired 
 	ProductRepository productRepository;
 	
-	@GetMapping("/api/entry/{eid}")
-	public Entry findEntryByEntryId(@PathVariable("eid") int id) {
-		Optional<Entry> data = entryRepository.findById(id);
-		if (data.isPresent()) {
-			return data.get();
-		}
-		return null;
-	}
-	@GetMapping("/api/order/{oId}/entries")
-	public List<Entry> findEntriesByOrder(
-			@PathVariable("oId")int oId) {
-		Optional<Orders> data = orderRepository.findById(oId);
-		if (data.isPresent()) {
-			Orders order = data.get();
-			return (List<Entry>)order.getEntry();
-		}
-		return null;
-	}
-	
 	@GetMapping("/api/buyer/{bId}/orders")
 	public List<Orders> findOrdersByBuyer(
 			@PathVariable("bId")int bId) {

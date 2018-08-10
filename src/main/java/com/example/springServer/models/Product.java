@@ -21,12 +21,18 @@ public class Product {
 	private String movieId;
 	@ManyToOne
 	private Seller seller;
-	//
 	@OneToMany(mappedBy="product", orphanRemoval =true)
 	@JsonIgnore
 	private List<Entry> entry;
 	private String title;
+	private int initialAmount;
 	
+	public int getInitialAmount() {
+		return initialAmount;
+	}
+	public void setInitialAmount(int initialAmount) {
+		this.initialAmount = initialAmount;
+	}
 	public int getId() {
 		return id;
 	}

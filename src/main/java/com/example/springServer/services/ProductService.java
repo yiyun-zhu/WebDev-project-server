@@ -66,6 +66,7 @@ public class ProductService {
 		if (data.isPresent()) {
 			Seller seller = data.get();
 			product.setSeller(seller);
+			product.setInitialAmount(product.getAmount());
 			return productRepository.save(product);
 		}
 		return null;
@@ -77,7 +78,10 @@ public class ProductService {
 		if (data.isPresent()) {
 			Product oldProduct = data.get();
 //			oldProduct.setProduct(product);
+			int addAmount = product.getAmount() - oldProduct.getAmount();
 			oldProduct.setAmount(product.getAmount());
+			oldProduct.setInitialAmount(
+					oldProduct.getInitialAmount() + addAmount);
 			oldProduct.setPrice(product.getPrice());
 			oldProduct.setTitle(product.getTitle());
 			productRepository.save(oldProduct);

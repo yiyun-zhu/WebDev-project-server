@@ -1,5 +1,6 @@
 package com.example.springServer.services;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +18,12 @@ import com.example.springServer.repositories.*;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "true")
-public class CartService {
+public class EntryService {
 	@Autowired 
 	BuyerRepository buyerRepository;
+	
+	@Autowired 
+	SellerRepository sellerRepository;
 	
 	@Autowired 
 	EntryRepository entryRepository;
@@ -27,11 +31,32 @@ public class CartService {
 	@Autowired
 	ProductRepository productRepo;
 	
+	@Autowired
+	OrderRepository orderRepository;
+	
 	@GetMapping("api/entries")
 	public List<Entry> findAllEntries() {
 		return (List<Entry>)entryRepository.findAll();
 	}
 	
+	@GetMapping("/api/entry/{eid}")
+	public Entry findEntryByEntryId(@PathVariable("eid") int id) {
+		Optional<Entry> data = entryRepository.findById(id);
+		if (data.isPresent()) {
+			return data.get();
+		}
+		return null;
+	}
+	@GetMapping("/api/order/{oId}/entries")
+	public List<Entry> findEntriesByOrder(
+			@PathVariable("oId")int oId) {
+		Optional<Orders> data = orderRepository.findById(oId);
+		if (data.isPresent()) {
+			Orders order = data.get();
+			return (List<Entry>)order.getEntry();
+		}
+		return null;
+	}
 	@GetMapping("api/buyer/{buyId}/entries")
 	public List<Entry> findCartByBuyer(
 			@PathVariable("buyId")int buyId) {
@@ -42,7 +67,21 @@ public class CartService {
 		}
 		return null;
 	}
-	
+	@GetMapping("/api/seller/{sId}/entries")
+	public List<Entry> findEntriesBySeller(
+			@PathVariable("sId")int sId) {
+		List<Entry> result = new LinkedList<>();
+		Optional<Seller> data = sellerRepository.findById(sId);
+		if(data.isPresent()) {
+			Seller seller= data.get();
+			List<Product> products = seller.getProduct();
+			for (Product p : products) {
+				result.addAll(p.getEntry());
+			}
+			return result;
+		}
+		return null;
+	}
 	@PostMapping("/api/buyer/{bId}/product/{pId}/entry")
 	public Entry addEntryToCart(
 			@PathVariable("bId")int bId,
