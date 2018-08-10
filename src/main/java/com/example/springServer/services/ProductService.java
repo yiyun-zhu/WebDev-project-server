@@ -76,7 +76,10 @@ public class ProductService {
 		Optional<Product> data = productRepository.findById(id);
 		if (data.isPresent()) {
 			Product oldProduct = data.get();
-			oldProduct.setProduct(product);
+//			oldProduct.setProduct(product);
+			oldProduct.setAmount(product.getAmount());
+			oldProduct.setPrice(product.getPrice());
+			oldProduct.setTitle(product.getTitle());
 			productRepository.save(oldProduct);
 			return oldProduct;
 		}

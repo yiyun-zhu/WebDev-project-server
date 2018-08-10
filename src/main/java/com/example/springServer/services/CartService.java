@@ -57,8 +57,11 @@ public class CartService {
 		Optional<Product> data1 = productRepo.findById(pId);
 		Optional<Buyer> data2 =  buyerRepository.findById(bId);
 		if (data1.isPresent() && data2.isPresent()) {
-			entry.setBuyer(data2.get());
-			entry.setProduct(data1.get());
+			Buyer buyer = data2.get();
+			entry.setBuyer(buyer);
+			Product product = data1.get();
+			entry.setProduct(product);
+			entry.setName(buyer.getUsername() + "purchased" + product.getTitle());
 			return entryRepository.save(entry);
 		}
 		return null;
