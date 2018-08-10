@@ -39,6 +39,16 @@ public class OrderService {
 		}
 		return null;
 	}
+	@GetMapping("/api/order/{oId}/entries")
+	public List<Entry> findEntriesByOrder(
+			@PathVariable("oId")int oId) {
+		Optional<Orders> data = orderRepository.findById(oId);
+		if (data.isPresent()) {
+			Orders order = data.get();
+			return (List<Entry>)order.getEntry();
+		}
+		return null;
+	}
 	
 	@GetMapping("/api/buyer/{bId}/orders")
 	public List<Orders> findOrdersByBuyer(
