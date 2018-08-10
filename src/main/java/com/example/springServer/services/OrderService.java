@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.springServer.repositories.BuyerRepository;
 import com.example.springServer.repositories.EntryRepository;
 import com.example.springServer.repositories.OrderRepository;
+import com.example.springServer.repositories.ProductRepository;
 import com.example.springServer.models.*;
 
 
@@ -30,6 +31,9 @@ public class OrderService {
 	
 	@Autowired 
 	BuyerRepository buyerRepository;
+	
+	@Autowired 
+	ProductRepository productRepository;
 	
 	@GetMapping("/api/entry/{eid}")
 	public Entry findEntryByEntryId(@PathVariable("eid") int id) {
@@ -115,6 +119,17 @@ public class OrderService {
 	@DeleteMapping("/api/order/{oid}")
 	public void deleteOrder(@PathVariable("oid") int id) {
 		orderRepository.deleteById(id);
+	}
+	
+	@PutMapping("/api/modify/order")
+	public Orders confirmOrder(@RequestBody Orders order) {
+		List<Entry> entries = order.getEntry();
+		for (Entry entry : entries) {
+			Product product = entry.getProduct();
+			product.setAmount(product.getAmount() - entry.getAmount());
+			productRepository.save(product);
+		}
+		return order;
 	}
 	
 }
