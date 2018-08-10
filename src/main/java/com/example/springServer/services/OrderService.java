@@ -40,6 +40,17 @@ public class OrderService {
 		return null;
 	}
 	
+	@GetMapping("/api/buyer/{bId}/orders")
+	public List<Orders> findOrdersByBuyer(
+			@PathVariable("bId")int bId) {
+		Optional<Buyer> data = buyerRepository.findById(bId);
+		if (data.isPresent()) {
+			Buyer buyer = data.get();
+			return (List<Orders>)buyer.getOrder();
+		}
+		return null;
+	}
+	
 //	@PostMapping("/api/buyer/{bid}/order")
 //	public Orders createOrder(@RequestBody Orders order, @PathVariable("bid") int id) {
 //		Optional<Buyer> data = buyerRepository.findById(id);
@@ -58,18 +69,19 @@ public class OrderService {
 			Buyer buyer = data.get();
 			order.setBuyer(buyer);
 			orderRepository.save(order);
-			List<Entry> entries = order.getEntry();
+//			List<Entry> entries = order.getEntry();
 			List<Entry> cartItems = buyer.getCartItems();
 			if (cartItems != null) {
 				for (Entry item : cartItems) {
-					Entry entry = new Entry();
-					entry.setAmount(item.getAmount());
-					entry.setBuyer(item.getBuyer());
-					entry.setProduct(item.getProduct());
-					entryRepository.save(entry);
-					entry.setOrder(order);	
-					entries.add(entry);
-					entryRepository.delete(item);
+//					Entry entry = new Entry();
+//					entry.setAmount(item.getAmount());
+//					entry.setBuyer(item.getBuyer());
+//					entry.setProduct(item.getProduct());
+					item.setBuyer(null);
+					item.setOrder(order);	
+					entryRepository.save(item);
+//					entries.add(item);
+//					entryRepository.delete(item);
 				}
 			}
 			return order;
