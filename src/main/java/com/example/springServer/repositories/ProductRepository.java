@@ -5,10 +5,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.example.springServer.models.Post;
+import com.example.springServer.models.Product;
 
-public interface PostRepository 
-	extends CrudRepository<Post, Integer>{
-	@Query("SELECT p FROM Post p WHERE p.imdbID=:imdbID")
-	Iterable<Post> findPostsForMovie(@Param("imdbID") String movieId);
+public interface ProductRepository  
+		extends CrudRepository<Product, Integer> {
+	@Query("SELECT p FROM Product p WHERE p.movieId=:movieId")
+	Iterable<Product> findProductsForMovie(@Param("movieId") String movieId);
 	
+
 }
