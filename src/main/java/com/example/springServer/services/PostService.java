@@ -60,6 +60,16 @@ public class PostService {
 			@PathVariable("movieId") String movieId) {
 		return (List<Post>)postRepo.findPostsForMovie(movieId);
 	}
+	@GetMapping("/api/critic/{cId}/posts")
+	public List<Post> findPostsByCritic(
+			@PathVariable("cId") int cId) {
+		Optional<Critic> data = criticRepo.findById(cId);
+		if (data.isPresent()) {
+			Critic critic = data.get();
+			return critic.getPost();			
+		}
+		return null;
+	}
 	@GetMapping("/api/post/{postId}")
 	public Post findPostById(
 			@PathVariable("postId")int postId) {

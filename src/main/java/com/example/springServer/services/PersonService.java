@@ -190,6 +190,20 @@ public class PersonService {
 		return null;
 	}
 	
+	// update Buyer
+	@PutMapping("api/profile/buyer")
+	public Buyer updateBuyerProfile(@RequestBody Buyer buyer, HttpSession session) {
+		Person currentUser = (Person)session.getAttribute("user");
+		if (currentUser != null) {
+			Buyer buyerToUpdate = (Buyer)currentUser;
+			buyerToUpdate.setAvatar(buyer.getAvatar());
+			buyerToUpdate.setEmail(buyer.getEmail());
+			buyerToUpdate.setAddress(buyer.getAddress());
+			return buyerRepo.save(buyerToUpdate);
+		}
+		return null;
+	}
+	
 	//logout
 	@PostMapping("api/logout")
 	public void logout(HttpSession session) {
