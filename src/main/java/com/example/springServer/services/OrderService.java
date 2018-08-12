@@ -1,5 +1,6 @@
 package com.example.springServer.services;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,6 +100,8 @@ public class OrderService {
 				productRepository.save(product);
 			}
 			orderToUpdate.setComplete(true);
+			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+			orderToUpdate.setCreated(timestamp);
 			orderRepository.save(orderToUpdate);
 			return orderToUpdate;
 		}
@@ -121,7 +124,5 @@ public class OrderService {
 	public void deleteOrder(@PathVariable("oid") int id) {
 		orderRepository.deleteById(id);
 	}
-	
-
 	
 }

@@ -24,6 +24,8 @@ public class CommentService {
 	CommentRepository commentRepo;
 	@Autowired
 	PostRepository postRepo;
+	@Autowired
+	UserRepository userRepo;
 	
 	@PostMapping("/api/post/{postId}/comment")
 	public Comment createComment(
@@ -47,6 +49,17 @@ public class CommentService {
 		if (data.isPresent()) {
 			Post post = data.get(); 
 			return post.getComments();
+		}
+		return null;
+	}
+	
+	@GetMapping("/api/user/{uId}/comments")
+	public List<Comment> findCommentsForUser(
+			@PathVariable("uId")int uId) {
+		Optional<User> data = userRepo.findById(uId);
+		if (data.isPresent()) {
+			User user = data.get(); 
+			return user.getComments();
 		}
 		return null;
 	}
