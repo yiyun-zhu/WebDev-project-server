@@ -1,5 +1,6 @@
 package com.example.springServer.services;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,11 @@ public class OrderService {
 	
 	@Autowired 
 	ProductRepository productRepository;
+	
+	@GetMapping("/api/orders")
+	public List<Orders> findAllOrders() {
+		return (List<Orders>) orderRepository.findAll();
+	}
 	
 	@GetMapping("/api/buyer/{bId}/orders")
 	public List<Orders> findOrdersByBuyer(
@@ -92,13 +98,31 @@ public class OrderService {
 		Optional<Orders> data = orderRepository.findById(order.getId());
 		if (data.isPresent()) {
 			Orders orderToUpdate = data.get();
+			Buyer buyer = orderToUpdate.getBuyer();
 			List<Entry> entries = orderToUpdate.getEntry();
 			for (Entry entry : entries) {
 				Product product = entry.getProduct();
 				product.setAmount(product.getAmount() - entry.getAmount());
 				productRepository.save(product);
+				// connect seller with buyer using ids
+				Seller seller = product.getSeller();
+				int sellerId = seller.getId();
+				List<Integer> sellerIds = buyer.getSellerIds();
+				int count = 0;
+				for (int id : sellerIds) {
+					if (id == sellerId) break;
+					else {
+						count++;
+					}
+				}
+				if (sellerIds.size() == count) {
+					sellerIds.add(sellerId);
+					(seller.getBuyerIds()).add(buyer.getId());
+				}
 			}
 			orderToUpdate.setComplete(true);
+			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+			orderToUpdate.setCreated(timestamp);
 			orderRepository.save(orderToUpdate);
 			return orderToUpdate;
 		}
@@ -122,6 +146,13 @@ public class OrderService {
 		orderRepository.deleteById(id);
 	}
 	
-
+	@GetMapping("/api/order/{oid}")
+	public Orders findOrderByOrderId(@PathVariable("oid") int id) {
+		Optional<Orders> data = orderRepository.findById(id);
+		if (data.isPresent()) {
+			return (Orders)data.get();
+		}
+		return null;
+	}
 	
 }

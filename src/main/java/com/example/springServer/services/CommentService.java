@@ -3,7 +3,6 @@ package com.example.springServer.services;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,20 +24,29 @@ public class CommentService {
 	CommentRepository commentRepo;
 	@Autowired
 	PostRepository postRepo;
+	@Autowired
+	UserRepository userRepo;
 	
-	@PostMapping("/api/post/{postId}/comment")
-	public Comment createComment(
-			@RequestBody Comment comment, 
-			@PathVariable("postId")int postId,
-			HttpSession session) {
-		Person currentUser = (Person)session.getAttribute("user");
-		comment.setUser((User)currentUser);
-		Optional<Post> data = postRepo.findById(postId);
-		if (data.isPresent()) {
-			comment.setPost(data.get());
-			return commentRepo.save(comment);
-		}
-		return null;
+	@PostMapping("/api/post/{postId}/user/{userId}/comment")
+	 public Comment createComment(
+	   @RequestBody Comment comment, 
+	   @PathVariable("postId")int postId,
+	   @PathVariable("userId")int userId) {
+	  Optional<User> data1 = userRepo.findById(userId);
+	  Optional<Post> data2 = postRepo.findById(postId);
+	  if (data1.isPresent() && data2.isPresent()) {
+	   User user = data1.get();
+	   Post post = data2.get();
+	   comment.setUser(user);
+	   comment.setPost(post);
+	   return commentRepo.save(comment);
+	  }
+	  return null;
+	 }
+	
+	@GetMapping("api/comments")
+	public List<Comment> findAllComments() {
+		return (List<Comment>) commentRepo.findAll();
 	}
 	
 	@GetMapping("/api/post/{postId}/comments")
@@ -50,6 +59,30 @@ public class CommentService {
 		}
 		return null;
 	}
+	
+	@GetMapping("/api/user/{uId}/comments")
+	public List<Comment> findCommentsForUser(
+			@PathVariable("uId")int uId) {
+		Optional<User> data = userRepo.findById(uId);
+		if (data.isPresent()) {
+			User user = data.get(); 
+			return user.getComments();
+		}
+		return null;
+	}
+	
+	@PutMapping("/api/comment/{cid}")
+	public Comment updateComment(@PathVariable("cid")int id, @RequestBody Comment comment) {
+		Optional<Comment> data = commentRepo.findById(id);
+		if (data.isPresent()) {
+			Comment oldComment = data.get();
+			oldComment.setContent(comment.getContent());
+			commentRepo.save(oldComment);
+			return oldComment;
+		}
+		return null;
+	}
+	
 	
 	@GetMapping("/api/comment/{commentId}")
 	public Comment findCommentById(

@@ -2,6 +2,7 @@ package com.example.springServer.models;
 
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
@@ -16,11 +17,21 @@ public class Buyer extends User {
 	@OneToMany(mappedBy="buyer", orphanRemoval=true)
 	@JsonIgnore
 	private List<Entry> cartItems;
+	@ElementCollection
+	private List<Integer> sellerIds;
+
+	public List<Integer> getSellerIds() {
+		return sellerIds;
+	}
+
+	public void setSellerIds(List<Integer> sellerIds) {
+		this.sellerIds = sellerIds;
+	}
 
 	public List<Entry> getCartItems() {
 		return cartItems;
 	}
-
+	
 	public void setCartItems(List<Entry> cartItems) {
 		this.cartItems = cartItems;
 	}

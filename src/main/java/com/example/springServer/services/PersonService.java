@@ -2,12 +2,15 @@ package com.example.springServer.services;
 
 import java.sql.Timestamp;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +62,33 @@ public class PersonService {
 		session.setAttribute("user", newUser);
 		return newUser;
 	}
+	
+	//delete
+	@DeleteMapping("/api/person/{pid}")
+	public void delete (@PathVariable("pid")int id) {
+		Optional<Person> data = repository.findById(id);
+		if (data.isPresent()) {
+			repository.deleteById(id);
+			Person person = data.get();
+			String role = person.getRole();
+			switch(role) {
+			case "user":
+				userRepo.deleteById(id);
+			case "buyer":
+				buyerRepo.deleteById(id);
+				userRepo.deleteById(id);
+				break;
+			case "seller":
+				buyerRepo.deleteById(id);
+				userRepo.deleteById(id);
+			case "reviewer":
+				criticRepo.deleteById(id);
+				userRepo.deleteById(id);
+				
+			}
+		}
+	}
+	
 	
 	// register reviewer
 	@PostMapping("/api/register/reviwer")
@@ -113,7 +143,7 @@ public class PersonService {
 		return newUser;
 	}
 	// find by username, by credentials, find all in one function 
-	@GetMapping("/api/person")
+	@GetMapping("/api/persons")
 	public Iterable<Person> findAllPersons(
 			@RequestParam(name="username",
 			required=false) String username,
@@ -182,10 +212,26 @@ public class PersonService {
 	public Person updateProfile(@RequestBody Person newUser, HttpSession session) {
 		Person currentUser = (Person)session.getAttribute("user");
 		if (currentUser != null) {
+			currentUser.setUsername(newUser.getUsername());
+			currentUser.setPassword(newUser.getPassword());
 			currentUser.setAvatar(newUser.getAvatar());
 			currentUser.setEmail(newUser.getEmail());
 			repository.save(currentUser);
 			return currentUser;
+		}
+		return null;
+	}
+	
+	// update Buyer
+	@PutMapping("api/profile/buyer")
+	public Buyer updateBuyerProfile(@RequestBody Buyer buyer, HttpSession session) {
+		Person currentUser = (Person)session.getAttribute("user");
+		if (currentUser != null) {
+			Buyer buyerToUpdate = (Buyer)currentUser;
+			buyerToUpdate.setAvatar(buyer.getAvatar());
+			buyerToUpdate.setEmail(buyer.getEmail());
+			buyerToUpdate.setAddress(buyer.getAddress());
+			return buyerRepo.save(buyerToUpdate);
 		}
 		return null;
 	}
@@ -200,5 +246,47 @@ public class PersonService {
 			repository.save(currentUser);
 			session.invalidate();
 		}
+	}
+	
+	// find buyers by seller
+	@GetMapping("api/seller/{sId}/buyers")
+	public List<Buyer> findBuyersBySeller(
+			@PathVariable("sId")int sId) {
+		List<Buyer> result = new LinkedList<>();
+		Optional<Seller> data = sellerRepo.findById(sId);
+		if (data.isPresent()) {
+			Seller seller = data.get();
+			List<Integer> buyerIds = seller.getBuyerIds();
+			for (int id : buyerIds) {
+				Optional<Buyer> data1 = buyerRepo.findById(id);
+				if (data1.isPresent()) {
+					Buyer buyer = data1.get();
+					result.add(buyer);
+				}
+			}
+			return result;
+		}
+		return null;
+	}
+	
+	// find sellers by buyer
+	@GetMapping("api/buyer/{bId}/sellers")
+	public List<Seller> findSellersByBuyer(
+			@PathVariable("bId")int bId) {
+		List<Seller> result = new LinkedList<>();
+		Optional<Buyer> data = buyerRepo.findById(bId);
+		if (data.isPresent()) {
+			Buyer buyer = data.get();
+			List<Integer> sellerIds = buyer.getSellerIds();
+			for (int id : sellerIds) {
+				Optional<Seller> data1 = sellerRepo.findById(id);
+				if (data1.isPresent()) {
+					Seller seller = data1.get();
+					result.add(seller);
+				}
+			}
+			return result;
+		}
+		return null;
 	}
 }

@@ -51,14 +51,26 @@ public class PostService {
 //		}
 //		return null;
 //	}
-	@GetMapping("/api/post")
+	@GetMapping("/api/posts")
 	public List<Post> findAllPosts() {
 		return (List<Post>)postRepo.findAll();
 	}
+	
+	
 	@GetMapping("/api/movie/{movieId}/post")
 	public List<Post> findPostsForMovie(
 			@PathVariable("movieId") String movieId) {
 		return (List<Post>)postRepo.findPostsForMovie(movieId);
+	}
+	@GetMapping("/api/critic/{cId}/posts")
+	public List<Post> findPostsByCritic(
+			@PathVariable("cId") int cId) {
+		Optional<Critic> data = criticRepo.findById(cId);
+		if (data.isPresent()) {
+			Critic critic = data.get();
+			return critic.getPost();			
+		}
+		return null;
 	}
 	@GetMapping("/api/post/{postId}")
 	public Post findPostById(

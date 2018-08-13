@@ -68,21 +68,7 @@ public class EntryService {
 		}
 		return null;
 	}
-	@GetMapping("/api/seller/{sId}/entries")
-	public List<Entry> findEntriesBySeller(
-			@PathVariable("sId")int sId) {
-		List<Entry> result = new LinkedList<>();
-		Optional<Seller> data = sellerRepository.findById(sId);
-		if(data.isPresent()) {
-			Seller seller= data.get();
-			List<Product> products = seller.getProduct();
-			for (Product p : products) {
-				result.addAll(p.getEntry());
-			}
-			return result;
-		}
-		return null;
-	}
+
 	@PostMapping("/api/buyer/{bId}/product/{pId}/entry")
 	public Entry addEntryToCart(
 			@PathVariable("bId")int bId,
@@ -124,6 +110,27 @@ public class EntryService {
 			@PathVariable("entryId")int entryId) {
 		entryRepository.deleteById(entryId);
 	}
+	
+	@GetMapping("/api/seller/{sId}/entries")
+	 public List<Entry> findEntriesBySeller(
+	   @PathVariable("sId")int sId) {
+	  List<Entry> result = new LinkedList<>();
+	  Optional<Seller> data = sellerRepository.findById(sId);
+	  if(data.isPresent()) {
+	   Seller seller= data.get();
+	   List<Product> products = seller.getProduct();
+	   for (Product p : products) {
+	    List<Entry> entries = p.getEntry();
+	    for (Entry entry : entries) {
+	     if (entry.getOrder().isComplete()) {
+	      result.add(entry);
+	     }
+	    }
+	   }
+	   return result;
+	  }
+	  return null;
+	 }
 	
 	
 }
