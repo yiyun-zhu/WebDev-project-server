@@ -1,5 +1,6 @@
 package com.example.springServer.services;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +34,23 @@ public class ProductService {
 	}
 	
 	@GetMapping("/api/movie/{movieId}/products")
+	public List<Product> findAvailableProductsByMovieId(
+			@PathVariable("movieId") String movieId) {
+		List<Product> products = (List<Product>)
+				productRepository.findProductsForMovie(movieId);
+		List<Product> result = new LinkedList<>();
+		for (Product p :  products) {
+			if (p.getAmount() != 0) {
+				result.add(p);
+			}
+		}
+		return result;
+	}
+	
+	@GetMapping("/api/movie/{movieId}/allproducts")
 	public List<Product> findProductsByMovieId(
 			@PathVariable("movieId") String movieId) {
-		return (List<Product>)productRepository.findProductsForMovie(movieId);
+		return (List<Product>) productRepository.findProductsForMovie(movieId);
 	}
 	
 	@GetMapping("/api/seller/{sid}/product")

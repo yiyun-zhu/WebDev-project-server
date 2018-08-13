@@ -3,6 +3,7 @@ package com.example.springServer.models;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,6 +14,9 @@ public class Seller extends User {
 	@OneToMany(mappedBy="seller", orphanRemoval =true)
 	@JsonIgnore
 	private List<Product> product;
+	@ManyToMany(mappedBy="sellers")
+	@JsonIgnore
+	private List<Buyer> buyers;
 	
 	public List<Product> getProduct() {
 		return product;

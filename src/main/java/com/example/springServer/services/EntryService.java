@@ -77,7 +77,12 @@ public class EntryService {
 			Seller seller= data.get();
 			List<Product> products = seller.getProduct();
 			for (Product p : products) {
-				result.addAll(p.getEntry());
+				List<Entry> entries = p.getEntry();
+				for (Entry entry : entries) {
+					if (entry.getOrder().isComplete()) {
+						result.add(entry);
+					}
+				}
 			}
 			return result;
 		}

@@ -3,8 +3,6 @@ package com.example.springServer.services;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,16 +25,18 @@ public class CommentService {
 	@Autowired
 	UserRepository userRepo;
 	
-	@PostMapping("/api/post/{postId}/comment")
+	@PostMapping("/api/post/{postId}/user/{userId}/comment")
 	public Comment createComment(
 			@RequestBody Comment comment, 
 			@PathVariable("postId")int postId,
-			HttpSession session) {
-		Person currentUser = (Person)session.getAttribute("user");
-		comment.setUser((User)currentUser);
-		Optional<Post> data = postRepo.findById(postId);
-		if (data.isPresent()) {
-			comment.setPost(data.get());
+			@PathVariable("userId")int userId) {
+		Optional<User> data1 = userRepo.findById(userId);
+		Optional<Post> data2 = postRepo.findById(postId);
+		if (data1.isPresent() && data2.isPresent()) {
+			User user = data1.get();
+			Post post = data2.get();
+			comment.setUser(user);
+			comment.setPost(post);
 			return commentRepo.save(comment);
 		}
 		return null;
