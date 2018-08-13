@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,6 +62,33 @@ public class PersonService {
 		session.setAttribute("user", newUser);
 		return newUser;
 	}
+	
+	//delete
+	@DeleteMapping("/api/person/{pid}")
+	public void delete (@PathVariable("pid")int id) {
+		Optional<Person> data = repository.findById(id);
+		if (data.isPresent()) {
+			repository.deleteById(id);
+			Person person = data.get();
+			String role = person.getRole();
+			switch(role) {
+			case "user":
+				userRepo.deleteById(id);
+			case "buyer":
+				buyerRepo.deleteById(id);
+				userRepo.deleteById(id);
+				break;
+			case "seller":
+				buyerRepo.deleteById(id);
+				userRepo.deleteById(id);
+			case "reviewer":
+				criticRepo.deleteById(id);
+				userRepo.deleteById(id);
+				
+			}
+		}
+	}
+	
 	
 	// register reviewer
 	@PostMapping("/api/register/reviwer")
@@ -115,7 +143,7 @@ public class PersonService {
 		return newUser;
 	}
 	// find by username, by credentials, find all in one function 
-	@GetMapping("/api/person")
+	@GetMapping("/api/persons")
 	public Iterable<Person> findAllPersons(
 			@RequestParam(name="username",
 			required=false) String username,
@@ -184,6 +212,8 @@ public class PersonService {
 	public Person updateProfile(@RequestBody Person newUser, HttpSession session) {
 		Person currentUser = (Person)session.getAttribute("user");
 		if (currentUser != null) {
+			currentUser.setUsername(newUser.getUsername());
+			currentUser.setPassword(newUser.getPassword());
 			currentUser.setAvatar(newUser.getAvatar());
 			currentUser.setEmail(newUser.getEmail());
 			repository.save(currentUser);
@@ -259,5 +289,4 @@ public class PersonService {
 		}
 		return null;
 	}
-	
 }

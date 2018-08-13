@@ -51,10 +51,12 @@ public class PostService {
 //		}
 //		return null;
 //	}
-	@GetMapping("/api/post")
+	@GetMapping("/api/posts")
 	public List<Post> findAllPosts() {
 		return (List<Post>)postRepo.findAll();
 	}
+	
+	
 	@GetMapping("/api/movie/{movieId}/post")
 	public List<Post> findPostsForMovie(
 			@PathVariable("movieId") String movieId) {

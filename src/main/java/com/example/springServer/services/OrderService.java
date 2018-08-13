@@ -36,6 +36,11 @@ public class OrderService {
 	@Autowired 
 	ProductRepository productRepository;
 	
+	@GetMapping("/api/orders")
+	public List<Orders> findAllOrders() {
+		return (List<Orders>) orderRepository.findAll();
+	}
+	
 	@GetMapping("/api/buyer/{bId}/orders")
 	public List<Orders> findOrdersByBuyer(
 			@PathVariable("bId")int bId) {
@@ -139,6 +144,15 @@ public class OrderService {
 	@DeleteMapping("/api/order/{oid}")
 	public void deleteOrder(@PathVariable("oid") int id) {
 		orderRepository.deleteById(id);
+	}
+	
+	@GetMapping("/api/order/{oid}")
+	public Orders findOrderByOrderId(@PathVariable("oid") int id) {
+		Optional<Orders> data = orderRepository.findById(id);
+		if (data.isPresent()) {
+			return (Orders)data.get();
+		}
+		return null;
 	}
 	
 }

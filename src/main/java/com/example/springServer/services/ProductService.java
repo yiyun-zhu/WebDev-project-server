@@ -29,7 +29,7 @@ public class ProductService {
 	SellerRepository sellerRepository;
 	
 	@GetMapping("/api/products")
-	public List<Product> findProducts() {
+	public List<Product> findAllProducts() {
 		return (List<Product>)productRepository.findAll();
 	}
 	
@@ -50,7 +50,7 @@ public class ProductService {
 	@GetMapping("/api/movie/{movieId}/allproducts")
 	public List<Product> findProductsByMovieId(
 			@PathVariable("movieId") String movieId) {
-		return (List<Product>) productRepository.findProductsForMovie(movieId);
+		return (List<Product>)productRepository.findProductsForMovie(movieId);
 	}
 	
 	@GetMapping("/api/seller/{sid}/product")
