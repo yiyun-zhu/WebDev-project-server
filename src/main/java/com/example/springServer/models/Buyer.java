@@ -20,10 +20,6 @@ public class Buyer extends User {
 	@ElementCollection
 	private List<Integer> sellerIds;
 
-	public List<Entry> getCartItems() {
-		return cartItems;
-	}
-
 	public List<Integer> getSellerIds() {
 		return sellerIds;
 	}
@@ -32,6 +28,10 @@ public class Buyer extends User {
 		this.sellerIds = sellerIds;
 	}
 
+	public List<Entry> getCartItems() {
+		return cartItems;
+	}
+	
 	public void setCartItems(List<Entry> cartItems) {
 		this.cartItems = cartItems;
 	}
