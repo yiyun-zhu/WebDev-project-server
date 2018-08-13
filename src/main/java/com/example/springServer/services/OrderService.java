@@ -93,11 +93,27 @@ public class OrderService {
 		Optional<Orders> data = orderRepository.findById(order.getId());
 		if (data.isPresent()) {
 			Orders orderToUpdate = data.get();
+			Buyer buyer = orderToUpdate.getBuyer();
 			List<Entry> entries = orderToUpdate.getEntry();
 			for (Entry entry : entries) {
 				Product product = entry.getProduct();
 				product.setAmount(product.getAmount() - entry.getAmount());
 				productRepository.save(product);
+				// connect seller with buyer using ids
+				Seller seller = product.getSeller();
+				int sellerId = seller.getId();
+				List<Integer> sellerIds = buyer.getSellerIds();
+				int count = 0;
+				for (int id : sellerIds) {
+					if (id == sellerId) break;
+					else {
+						count++;
+					}
+				}
+				if (sellerIds.size() == count) {
+					sellerIds.add(sellerId);
+					(seller.getBuyerIds()).add(buyer.getId());
+				}
 			}
 			orderToUpdate.setComplete(true);
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis());

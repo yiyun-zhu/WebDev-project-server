@@ -2,6 +2,8 @@ package com.example.springServer.services;
 
 import java.sql.Timestamp;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -215,4 +217,47 @@ public class PersonService {
 			session.invalidate();
 		}
 	}
+	
+	// find buyers by seller
+	@GetMapping("api/seller/{sId}/buyers")
+	public List<Buyer> findBuyersBySeller(
+			@PathVariable("sId")int sId) {
+		List<Buyer> result = new LinkedList<>();
+		Optional<Seller> data = sellerRepo.findById(sId);
+		if (data.isPresent()) {
+			Seller seller = data.get();
+			List<Integer> buyerIds = seller.getBuyerIds();
+			for (int id : buyerIds) {
+				Optional<Buyer> data1 = buyerRepo.findById(id);
+				if (data1.isPresent()) {
+					Buyer buyer = data1.get();
+					result.add(buyer);
+				}
+			}
+			return result;
+		}
+		return null;
+	}
+	
+	// find sellers by buyer
+	@GetMapping("api/buyer/{bId}/sellers")
+	public List<Seller> findSellersByBuyer(
+			@PathVariable("bId")int bId) {
+		List<Seller> result = new LinkedList<>();
+		Optional<Buyer> data = buyerRepo.findById(bId);
+		if (data.isPresent()) {
+			Buyer buyer = data.get();
+			List<Integer> sellerIds = buyer.getSellerIds();
+			for (int id : sellerIds) {
+				Optional<Seller> data1 = sellerRepo.findById(id);
+				if (data1.isPresent()) {
+					Seller seller = data1.get();
+					result.add(seller);
+				}
+			}
+			return result;
+		}
+		return null;
+	}
+	
 }

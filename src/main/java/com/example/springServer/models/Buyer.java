@@ -2,8 +2,8 @@ package com.example.springServer.models;
 
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,12 +17,19 @@ public class Buyer extends User {
 	@OneToMany(mappedBy="buyer", orphanRemoval=true)
 	@JsonIgnore
 	private List<Entry> cartItems;
-	@ManyToMany(mappedBy="buyers")
-	@JsonIgnore
-	private List<Seller> sellers;
+	@ElementCollection
+	private List<Integer> sellerIds;
 
 	public List<Entry> getCartItems() {
 		return cartItems;
+	}
+
+	public List<Integer> getSellerIds() {
+		return sellerIds;
+	}
+
+	public void setSellerIds(List<Integer> sellerIds) {
+		this.sellerIds = sellerIds;
 	}
 
 	public void setCartItems(List<Entry> cartItems) {
